@@ -1,4 +1,40 @@
 :root {
   --ff-header: 'Libre Franklin', sans-serif;
   --ff-body: 'Inter', sans-serif;
+
+  // Font Sizes
+  --fs-small: clamp(1rem, 0.9375rem + 0.3125vw, 1.125rem);
+  --fs-base: clamp(1.125rem, 1.0625rem + 0.3125vw, 1.25rem);
+  --fs-h6: clamp(1.25rem, 1.1875rem + 0.3125vw, 1.375rem);
+  --fs-h5: clamp(1.375rem, 1.3125rem + 0.3125vw, 1.5rem);
+  --fs-h4: clamp(1.5rem, 1.375rem + 0.625vw, 1.75rem);
+  --fs-h3: clamp(1.75rem, 1.5625rem + 0.9375vw, 2.125rem);
+  --fs-h2: clamp(2.125rem, 1.875rem + 1.25vw, 2.625rem);
+  --fs-h1: clamp(2.25rem, 1.5rem + 3.75vw, 4rem);
+
+  // Font weights
+  --fw-100: 100;
+  --fw-200: 200;
+  --fw-300: 300;
+  --fw-400: 400;
+  --fw-500: 500;
+  --fw-600: 600;
+  --fw-700: 700;
+  --fw-800: 800;
+  --fw-900: 900;
+
+  // Line heights
+  --lh-16: 1rem;
+  --lh-18: 1.125rem;
+  --lh-20: 1.25rem;
+  --lh-22: 1.375rem;
+  --lh-24: 1.5rem;
+  --lh-26: 1.625rem;
+  --lh-28: 1.75rem;
+  --lh-30: 1.875rem;
+  --lh-32: 2rem;
+  --lh-34: 2.125rem;
+  --lh-36: 2.25rem;
+  --lh-38: 2.375rem;
+  --lh-40: 2.5rem;
 }

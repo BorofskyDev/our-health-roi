@@ -1,4 +1,4 @@
-import '../styles/main.scss'
+
 
 const $ = (id) => document.getElementById(id)
 

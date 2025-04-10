@@ -1,0 +1,20 @@
+@mixin flex {
+    display: flex;
+}
+
+@mixin flexCol {
+    @include flex;
+    flex-direction: column;
+}
+
+@mixin flexColCtr {
+    @include flexCol;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin flexColSection {
+    @include flexColCtr;
+    margin: 2.75em auto;
+    gap: 1.5em;
+}

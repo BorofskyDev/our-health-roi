@@ -1,4 +1,3 @@
-
 *,
 *::before,
 *::after {
@@ -22,7 +21,12 @@ dd {
   margin: 0;
 }
 
-h1,h2, h3,h4,h5,h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-size: inherit;
   font-weight: inherit;
   line-height: inherit;
@@ -57,7 +61,6 @@ svg {
   max-width: 100%;
 }
 
-
 input,
 button,
 textarea,
@@ -66,7 +69,6 @@ select {
   color: inherit;
 }
 
-
 button {
   background: none;
   border: none;
@@ -74,19 +76,16 @@ button {
   outline: none;
 }
 
-
 fieldset {
   border: none;
   margin: 0;
   padding: 0;
 }
 
-
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-
 
 input,
 textarea,
@@ -96,8 +95,8 @@ select {
   background: none;
 }
 
-input[type="search"],
-input[type="number"] {
+input[type='search'],
+input[type='number'] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -110,22 +109,17 @@ button {
   color: inherit;
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input[type="number"] {
-  -moz-appearance: textfield;
-}
 
-
-input[type="checkbox"],
-input[type="radio"] {
+input[type='checkbox'],
+input[type='radio'] {
   appearance: none;
   padding: 0;
 }
-
 
 textarea:not([rows]) {
   min-height: 10em;
@@ -135,7 +129,7 @@ textarea:not([rows]) {
   html:focus-within {
     scroll-behavior: auto;
   }
-  
+
   *,
   *::before,
   *::after {

@@ -1,0 +1,7 @@
+@use '@/styles/abstracts/mixins' as *;
+
+.flex-col-section {
+   
+    @include flexColSection;
+    gap: var(--spacing-24);
+}

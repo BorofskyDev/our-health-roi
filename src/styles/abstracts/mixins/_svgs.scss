@@ -1,0 +1,10 @@
+@mixin linkSvg {
+    position: absolute;
+      top: 0;
+      right: 0;
+      width: var(--spacing-24);
+      height: var(--spacing-24);
+      transform: translate(100%, -50%);
+      stroke: inherit;
+      stroke-width: var(--spacing-2);
+}

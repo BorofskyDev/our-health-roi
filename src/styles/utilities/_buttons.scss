@@ -1,0 +1,7 @@
+@use '@/styles/abstracts/mixins/' as *;
+
+.cta-btn {
+    @include btnBase;
+    background-color: hsl(var(--color-bg-alt));
+    color: hsl(var(--color-text-alt));
+}
