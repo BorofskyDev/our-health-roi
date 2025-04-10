@@ -1,13 +1,14 @@
+@use '@/styles/abstracts/mixins' as *;
+
 .main-header {
-    font-family: var(--ff-header);
-    font-weight: var(--fw-900);
-    font-size: var(--fs-h1);
-    line-height: var(--lh-24);
+    @include heading-style(1)
+}
+
+.section-title {
+   @include heading-style(2);
 }
 
 .section-heading {
-    font-family: var(--ff-header);
-    font-weight: var(--fw-700);
-    font-size: var(--fs-h3);
-    line-height: var(--lh-28);
+    @include heading-style(3);
 }
+

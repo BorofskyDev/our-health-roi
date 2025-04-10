@@ -1,0 +1,75 @@
+@mixin typography($font-family, $weight, $size, $line-height, $text-transform: capitalize) {
+  font-family: $font-family;
+  font-weight: $weight;
+  font-size: $size;
+  line-height: $line-height;
+  text-transform: $text-transform
+}
+
+@mixin heading-style($level) {
+  @if $level == 1 {
+    @include typography(
+      var(--ff-header),
+      var(--fw-900),
+      var(--fs-h1),
+      var(--lh-24),
+      uppercase
+    );
+  } @else if $level == 2 {
+    @include typography(
+      var(--ff-header),
+      var(--fw-800),
+      var(--fs-h2),
+      var(--lh-24),
+      
+    );
+  } @else if $level == 3 {
+    @include typography(
+      var(--ff-header),
+      var(--fw-700),
+      var(--fs-h3),
+      var(--lh-28),
+      
+    );
+  } @else if $level == 4 {
+    @include typography(
+      var(--ff-header),
+      var(--fw-600),
+      var(--fs-h4),
+      var(--lh-24),
+      
+    );
+  } @else if $level == 5 {
+    @include typography(
+      var(--ff-header),
+      var(--fw-500),
+      var(--fs-h5),
+      var(--lh-20),
+      
+    );
+  } @else if $level == 6 {
+    @include typography(
+      var(--ff-header),
+      var(--fw-500),
+      var(--fs-h6),
+      var(--lh-18),
+      
+    );
+  }
+}
+
+@mixin body-text($weight: var(--fw-400)) {
+  @include typography(var(--ff-body), $weight, var(--fs-base), var(--lh-30), none);
+}
+
+@mixin small-text($weight: var(--fw-400)) {
+  @include typography(var(--ff-body), $weight, var(--fs-small), var(--lh-24), none);
+}
+
+@mixin bold-text {
+  font-weight: var(--fw-700);
+}
+
+@mixin italic-text {
+  font-style: italic;
+}

@@ -1,6 +1,6 @@
+@use '@/styles/abstracts/mixins' as *;
 
-
-
+.body-text { @include body-text;}
 
 .very-light { font-weight: var(--fw-100);}
 .extra-light { font-weight: var(--fw-200);}

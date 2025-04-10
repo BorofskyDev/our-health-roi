@@ -13,8 +13,14 @@
     align-items: center;
 }
 
+@mixin flexRowCtr {
+    @include flex;
+    justify-content: center;
+    align-items: center;
+}
+
 @mixin flexColSection {
     @include flexColCtr;
-    margin: 2.75em auto;
+    margin: var(--spacing-80) auto;
     gap: 1.5em;
 }

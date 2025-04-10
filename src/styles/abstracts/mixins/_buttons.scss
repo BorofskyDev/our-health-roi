@@ -1,7 +1,8 @@
 @use '@/styles/abstracts/mixins/accessibility' as *;
+@use '@/styles/abstracts/mixins/flex' as *;
 
-@mixin btnBase {
-  padding: 0.5em 1.5em;
+@mixin btnBase ($py, $px) {
+  padding: $py $px;
   border-radius: 0.5em;
   border: var(--border-standard);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
@@ -23,3 +24,20 @@
     @include focused;
   }
 }
+
+
+@mixin iconModalBtn {
+  @include btnBase(var(--spacing-8), var(--spacing-44));
+  @include flexRowCtr;
+
+  gap: var(--spacing-8);
+  stroke: hsl(var(--color-text-alt));
+  
+  svg {
+      width: var(--spacing-40);
+      height: var(--spacing-40);
+      stroke-width: var(--spacing-2);
+  }
+
+}
+

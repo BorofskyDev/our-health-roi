@@ -1,0 +1,32 @@
+@use '@/styles/abstracts/mixins/' as *;
+
+.cta-btn {
+  @include btnBase(var(--spacing-8), var(--spacing-16));
+  background-color: hsl(var(--color-bg-alt));
+  color: hsl(var(--color-text-alt));
+}
+
+.icon-modal-btn-primary {
+  @include iconModalBtn;
+  @extend .cta-btn;
+}
+
+.icon-modal-btn-secondary {
+  @include iconModalBtn;
+  stroke: hsl(var(--color-text));
+  &:hover,
+  &:focus,
+  &:focus-within {
+    stroke: hsl(var(--color-text-alt));
+    color: hsl(var(--color-text-alt));
+}
+
+& svg {
+      stroke: inherit;
+    & path {
+        color: hsl(var(--color-text));
+        stroke: inherit;
+
+    }
+  }
+}
