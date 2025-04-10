@@ -1,0 +1,13 @@
+
+<section class="flex-col-section" id="resources">
+  <h2 class="section-title mb-24 center">Resources</h2>
+  {{#each resources}}
+    <p class="external-link mb-44">
+      {{> external-link 
+        href=this.href 
+        text=this.text 
+        ariaLabel=this.ariaLabel
+      }}
+    </p>
+  {{/each}}
+</section>

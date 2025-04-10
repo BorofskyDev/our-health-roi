@@ -1,13 +1,19 @@
 
 import { defineConfig } from 'vite';
-import path from 'path';
+import { resolve } from 'path';
+import handlebars from 'vite-plugin-handlebars';
 
 export default defineConfig({
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      '@': resolve(__dirname, 'src'),
     },
   },
+  plugins: [
+    handlebars({
+      partialDirectory: resolve(__dirname, 'src/partials'),
+    }),
+  ],
   server: {
     proxy: {
       // anything starting with /nih → NIH RePORTER
