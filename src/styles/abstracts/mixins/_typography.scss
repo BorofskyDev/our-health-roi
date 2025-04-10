@@ -12,7 +12,7 @@
       var(--ff-header),
       var(--fw-900),
       var(--fs-h1),
-      var(--lh-24),
+      var(--lh-40),
       uppercase
     );
   } @else if $level == 2 {
@@ -20,7 +20,7 @@
       var(--ff-header),
       var(--fw-800),
       var(--fs-h2),
-      var(--lh-24),
+      var(--lh-40),
       
     );
   } @else if $level == 3 {
@@ -28,7 +28,7 @@
       var(--ff-header),
       var(--fw-700),
       var(--fs-h3),
-      var(--lh-28),
+      var(--lh-30),
       
     );
   } @else if $level == 4 {
@@ -59,7 +59,7 @@
 }
 
 @mixin body-text($weight: var(--fw-400)) {
-  @include typography(var(--ff-body), $weight, var(--fs-base), var(--lh-30), none);
+  @include typography(var(--ff-body), $weight, var(--fs-base), var(--lh-36), none);
 }
 
 @mixin small-text($weight: var(--fw-400)) {
