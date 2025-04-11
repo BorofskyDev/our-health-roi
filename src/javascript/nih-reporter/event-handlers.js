@@ -149,6 +149,7 @@ function ensureRequiredElementsExist() {
  */
 function checkRequiredElements() {
   const requiredElements = ['label', 'proj', 'pub', 'pat', 'ct']
+  const missingElements = requiredElements.filter((id) => !$(id))
 
   return true
 }

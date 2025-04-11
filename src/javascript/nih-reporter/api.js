@@ -1,10 +1,50 @@
-//  src/javascript/components/external-link.js
+//  src/javascript/nih-reporter/api.js
 
 /**
  * Fetch NIH projects data
  * @param {string} term - Search term
  * @returns {Promise<Object>} Projects data with total count and reporter URL
  */
+
+// export async function fetchProjects(term) {
+//   try {
+//     const payload = {
+//       criteria: {
+//         advanced_text_search: {
+//           operator: 'and',
+//           search_field: 'all',
+//           search_text: term,
+//         },
+//       },
+//       offset: 0,
+//       limit: 1,
+//       include_fields: ['ProjectNum'],
+//     }
+
+//     const response = await fetch('/nih/v2/projects/search', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify(payload),
+//     })
+
+//     if (!response.ok) {
+//       throw new Error(`NIH Projects API error: ${response.status}`)
+//     }
+
+//     const data = await response.json()
+//     const searchId = data.meta?.search_id || null
+//     const reporterURL = data.meta?.properties?.URL || null
+
+//     return {
+//       total: data.meta?.total || 0,
+//       searchId,
+//       reporterURL,
+//     }
+//   } catch (error) {
+//     console.error('Error fetching NIH projects:', error)
+//     return { total: 0, reporterURL: null }
+//   }
+// }
 
 export async function fetchProjects(term) {
   try {
@@ -21,7 +61,10 @@ export async function fetchProjects(term) {
       include_fields: ['ProjectNum'],
     }
 
-    const response = await fetch('/nih/v2/projects/search', {
+    // Use the API route in production
+    const apiEndpoint = '/api/nih/v2/projects/search'
+
+    const response = await fetch(apiEndpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -42,7 +85,7 @@ export async function fetchProjects(term) {
     }
   } catch (error) {
     console.error('Error fetching NIH projects:', error)
-    return { total: 0, reporterURL: null }
+    throw error // Re-throw to show the proper error in the UI
   }
 }
 
