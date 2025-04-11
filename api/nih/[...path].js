@@ -1,37 +1,43 @@
 // api/nih/[...path].js
 export default async function handler(req, res) {
-  const { path } = req.query
-  const apiPath = Array.isArray(path) ? path.join('/') : path
-  const targetUrl = `https://api.reporter.nih.gov/${apiPath}`
-
   try {
+    // Parse the path from the request query
+    const pathSegments = req.query.path || []
+    const apiPath = Array.isArray(pathSegments)
+      ? pathSegments.join('/')
+      : pathSegments
+
+    // Construct the target URL
+    const targetUrl = `https://api.reporter.nih.gov/${apiPath}`
+
+    // Get the request body
+    let body
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
+      body = req.body
+    }
+
+    // Forward the request to the NIH API
     const response = await fetch(targetUrl, {
       method: req.method,
       headers: {
         'Content-Type': 'application/json',
-        // Forward other necessary headers, but strip out host-specific ones
-        ...Object.fromEntries(
-          Object.entries(req.headers).filter(
-            ([key]) =>
-              !['host', 'connection', 'content-length'].includes(
-                key.toLowerCase()
-              )
-          )
-        ),
+        // Add any other headers needed
       },
-      body:
-        req.method !== 'GET' && req.method !== 'HEAD'
-          ? JSON.stringify(req.body)
-          : undefined,
+      ...(body && { body: JSON.stringify(body) }),
     })
 
+    // Check if response is OK
+    if (!response.ok) {
+      // Forward the error status
+      return res.status(response.status).json({
+        error: `NIH API returned ${response.status}`,
+        details: await response.text(),
+      })
+    }
+
+    // Parse the response as JSON and return it
     const data = await response.json()
-
-    // Forward the response status
-    res.status(response.status)
-
-    // Return the data
-    return res.json(data)
+    return res.status(200).json(data)
   } catch (error) {
     console.error('Proxy error:', error)
     return res.status(500).json({

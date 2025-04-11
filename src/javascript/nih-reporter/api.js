@@ -61,22 +61,38 @@ export async function fetchProjects(term) {
       include_fields: ['ProjectNum'],
     }
 
-    // Use the API route in production
-    const apiEndpoint = '/api/nih/v2/projects/search'
+    // Use environment-specific endpoint with a fallback mechanism
+    const isProduction = window.location.hostname !== 'localhost'
 
-    const response = await fetch(apiEndpoint, {
+    // In development, use the Vite proxy
+    // In production, use the Vercel API route
+    const endpoint = isProduction
+      ? '/api/nih/v2/projects/search'
+      : '/nih/v2/projects/search'
+
+    console.log(`Using API endpoint: ${endpoint} (production: ${isProduction})`)
+
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     })
 
     if (!response.ok) {
+      const errorText = await response.text()
+      console.error('NIH Projects API error response:', errorText)
       throw new Error(`NIH Projects API error: ${response.status}`)
     }
 
     const data = await response.json()
     const searchId = data.meta?.search_id || null
     const reporterURL = data.meta?.properties?.URL || null
+
+    console.log('NIH Projects API response:', {
+      total: data.meta?.total || 0,
+      searchId,
+      reporterURL,
+    })
 
     return {
       total: data.meta?.total || 0,
@@ -85,10 +101,15 @@ export async function fetchProjects(term) {
     }
   } catch (error) {
     console.error('Error fetching NIH projects:', error)
-    throw error // Re-throw to show the proper error in the UI
+    // Return a default value instead of throwing to prevent UI crashes
+    // but log the error for debugging
+    return {
+      total: 0,
+      reporterURL: null,
+      error: error.message,
+    }
   }
 }
-
 /**
  * Fetch PubMed publications count
  * @param {string} term - Search term
