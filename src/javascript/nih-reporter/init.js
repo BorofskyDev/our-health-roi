@@ -1,4 +1,4 @@
-
+// src/javascript/nih-reporter/index.js
 import { showSpinner, hideSpinner } from '../animations'
 import { setupEventListeners } from './event-handlers'
 import { renderNIHResults } from '../templates/nih-results'

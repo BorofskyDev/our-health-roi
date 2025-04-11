@@ -1,3 +1,4 @@
+//  src/javascript/components/contact-section.js
 
 import { createExternalLink } from './external-link'
 import { createIconButton } from './icon-button'

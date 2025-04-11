@@ -1,3 +1,5 @@
+// src/javascript/nih-reporter/event-handlers.js
+
 import { $, updateResultsView } from './dom-utils'
 import {
   fetchProjects,
@@ -7,6 +9,7 @@ import {
 } from './api'
 import { showSpinner, hideSpinner } from '../animations'
 import { renderNIHResults } from '../templates/nih-results'
+import { setupModalButtons } from '../components/setup-modal-buttons'
 
 export function setupEventListeners() {
   const searchButton = $('searchBtn')
@@ -108,6 +111,12 @@ async function handleSearch() {
         trialsCount,
         baseUrl,
       })
+      updateModalsWithResearchData(term, {
+         projects: projectsData.total,
+        publications: publicationsCount,
+        patents: patentsCount,
+        clinicalTrials: trialsCount,
+      })
     } else {
       console.error(
         'Required elements missing after data fetch, cannot update results view'
@@ -119,6 +128,7 @@ async function handleSearch() {
     alert('Something went wrong – open developer tools for details.')
     console.error('Search error:', error)
   }
+
 }
 
 /**
@@ -142,4 +152,8 @@ function checkRequiredElements() {
   const missingElements = requiredElements.filter((id) => !$(id))
 
   return true
+}
+
+function updateModalsWithResearchData(searchTerm, researchData) {
+  setupModalButtons(searchTerm, researchData)
 }

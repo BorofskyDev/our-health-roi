@@ -12,3 +12,6 @@
     @include heading-style(3);
 }
 
+.paragraph-heading {
+    @include heading-style(4);
+}

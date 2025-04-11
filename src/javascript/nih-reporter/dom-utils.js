@@ -1,3 +1,5 @@
+// src/javascript/nih-reporter/dom-utils.js
+
 /**
  * Get element by ID - shorthand
  * @param {string} id - Element ID

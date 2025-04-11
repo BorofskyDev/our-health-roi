@@ -1,3 +1,5 @@
+//  src/javascript/components/external-link.js
+
 /**
  * Fetch NIH projects data
  * @param {string} term - Search term

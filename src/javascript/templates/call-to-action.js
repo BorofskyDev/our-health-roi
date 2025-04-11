@@ -1,3 +1,5 @@
+// src/javascript/templates/call-to-action.js
+
 import { createContactSection } from '../components/contact-section'
 
 export function renderCallToAction() {

@@ -1,3 +1,5 @@
+//  src/javascript/components/icon-button.js
+
 export function createIconButton(iconId, text, buttonClass, buttonId) {
   return ` 
     <button class="${buttonClass}" ${buttonId ? `id="${buttonId}"` : ''}>
