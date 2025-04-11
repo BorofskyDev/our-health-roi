@@ -39,226 +39,202 @@ export function createModal(options) {
     </div>
   `
 }
-
 /**
  * Initialize all modals in the document
  * @param {string} searchTerm - The search term to include in modals
  * @param {Object} researchData - Research data from API calls
  */
 export function initModals(searchTerm = '', researchData = {}) {
-  // Set research data in hidden fields for each modal type
-  const setResearchData = (prefix) => {
-    if (researchData.projects !== undefined) {
-      document
-        .getElementById(`${prefix}-count`)
-        ?.setAttribute('value', researchData.projects)
-    }
-    if (researchData.publications !== undefined) {
-      document
-        .getElementById(`${prefix}-count`)
-        ?.setAttribute('value', researchData.publications)
-    }
-    if (researchData.patents !== undefined) {
-      document
-        .getElementById(`${prefix}-count`)
-        ?.setAttribute('value', researchData.patents)
-    }
-    if (researchData.clinicalTrials !== undefined) {
-      document
-        .getElementById(`${prefix}-count`)
-        ?.setAttribute('value', researchData.clinicalTrials)
-    }
+  console.log('Initializing modals with research data:', researchData);
+  
+  // Set research data in hidden fields - this is the function that needs to be fixed
+  if (researchData.projects !== undefined) {
+    const projectsFields = document.querySelectorAll('[id$="projects-count"],[id$="projects-count-call"],[id$="projects-count-senator"],[id$="projects-count-call-senator"]');
+    projectsFields.forEach(field => {
+      if (field) field.value = researchData.projects;
+    });
+  }
+  
+  if (researchData.publications !== undefined) {
+    const pubFields = document.querySelectorAll('[id$="publications-count"],[id$="publications-count-call"],[id$="publications-count-senator"],[id$="publications-count-call-senator"]');
+    pubFields.forEach(field => {
+      if (field) field.value = researchData.publications;
+    });
+  }
+  
+  if (researchData.patents !== undefined) {
+    const patentFields = document.querySelectorAll('[id$="patents-count"],[id$="patents-count-call"],[id$="patents-count-senator"],[id$="patents-count-call-senator"]');
+    patentFields.forEach(field => {
+      if (field) field.value = researchData.patents;
+    });
+  }
+  
+  if (researchData.clinicalTrials !== undefined) {
+    const trialFields = document.querySelectorAll('[id$="clinical-trials-count"],[id$="clinical-trials-count-call"],[id$="clinical-trials-count-senator"],[id$="clinical-trials-count-call-senator"]');
+    trialFields.forEach(field => {
+      if (field) field.value = researchData.clinicalTrials;
+    });
   }
 
-  // Set data for each modal
-  setResearchData('projects')
-  setResearchData('publications')
-  setResearchData('patents')
-  setResearchData('clinical-trials')
-
-  // For call rep modal
-  setResearchData('projects-count-call')
-  setResearchData('publications-count-call')
-  setResearchData('patents-count-call')
-  setResearchData('clinical-trials-count-call')
-
-  // For email senators modal
-  setResearchData('projects-count-senator')
-  setResearchData('publications-count-senator')
-  setResearchData('patents-count-senator')
-  setResearchData('clinical-trials-count-senator')
-
-  // For call senators modal
-  setResearchData('projects-count-call-senator')
-  setResearchData('publications-count-call-senator')
-  setResearchData('patents-count-call-senator')
-  setResearchData('clinical-trials-count-call-senator')
-
-  // Initialize character counters for all textareas
-  initCharacterCounters('personal-impact', 'impact-char-count')
-  initCharacterCounters('personal-impact-call', 'impact-call-char-count')
-  initCharacterCounters('personal-impact-senator', 'impact-senator-char-count')
-  initCharacterCounters(
-    'personal-impact-call-senator',
-    'impact-call-senator-char-count'
-  )
+  // Initialize character counter for textarea
+  initCharacterCounters();
 
   // Handle preview buttons if they exist
   document.querySelectorAll('.preview-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const modal = btn.closest('.modal')
-      const previewSection = modal.querySelector('.preview-section')
-      const previewContent = modal.querySelector('.preview-content')
+      const modal = btn.closest('.modal');
+      const previewSection = modal.querySelector('.preview-section');
+      const previewContent = modal.querySelector('.preview-content');
 
       if (previewSection && previewContent) {
         // Get the form data
-        const form = modal.querySelector('form')
-        if (!form) return
+        const form = modal.querySelector('form');
+        if (!form) return;
 
         // Check if form is valid
         if (!form.checkValidity()) {
-          form.reportValidity()
-          return
+          form.reportValidity();
+          return;
         }
 
-        const formData = new FormData(form)
+        const formData = new FormData(form);
+        
+        // Debug: Log the form data
+        console.log('Form data for preview:');
+        for (let [key, value] of formData.entries()) {
+          console.log(`${key}: ${value}`);
+        }
 
         // Generate preview based on modal type
-        let previewText = ''
-        const modalType = btn.dataset.modalType
+        let previewText = '';
+        const modalType = btn.dataset.modalType;
 
-        switch (modalType) {
-          case 'email-rep':
-            previewText = generateEmailRepPreviewText(formData, searchTerm)
-            break
-          case 'call-rep':
-            previewText = generateCallRepPreviewText(formData, searchTerm)
-            break
-          case 'email-senators':
-            previewText = generateEmailSenatorsPreviewText(formData, searchTerm)
-            break
-          case 'call-senators':
-            previewText = generateCallSenatorsPreviewText(formData, searchTerm)
-            break
-          default:
-            previewText = generateDefaultPreviewText(modalType, searchTerm)
+        if (modalType === 'email-rep') {
+          previewText = generateEmailRepPreviewText(formData, searchTerm);
+        } else if (modalType === 'call-rep') {
+          previewText = generateCallRepPreviewText(formData, searchTerm);
+        } else if (modalType === 'email-senators') {
+          previewText = generateEmailSenatorsPreviewText(formData, searchTerm);
+        } else if (modalType === 'call-senators') {
+          previewText = generateCallSenatorsPreviewText(formData, searchTerm);
+        } else {
+          // Default preview if specific handler not available
+          previewText = generateDefaultPreviewText(modalType, searchTerm);
         }
 
         // Show the preview section and update content
-        previewSection.style.display = 'block'
-        previewContent.textContent = previewText
+        previewSection.style.display = 'block';
+        previewContent.textContent = previewText;
       }
-    })
-  })
+    });
+  });
 
   // Handle copy buttons if they exist
   document.querySelectorAll('.copy-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const previewContent = btn.previousElementSibling
+      const previewContent = btn.previousElementSibling;
       if (previewContent) {
         navigator.clipboard
           .writeText(previewContent.textContent)
           .then(() => {
             // Visual feedback for copy success
-            const originalText = btn.textContent
-            btn.textContent = 'Copied!'
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
             setTimeout(() => {
-              btn.textContent = originalText
-            }, 2000)
+              btn.textContent = originalText;
+            }, 2000);
           })
           .catch((err) => {
-            console.error('Failed to copy text: ', err)
-          })
+            console.error('Failed to copy text: ', err);
+          });
       }
-    })
-  })
+    });
+  });
 
   // Initialize close buttons
   document.querySelectorAll('.close-modal').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const modalId = btn.dataset.modalId
-      const modal = document.getElementById(modalId)
+      const modalId = btn.dataset.modalId;
+      const modal = document.getElementById(modalId);
       if (modal) {
-        modal.style.display = 'none'
+        modal.style.display = 'none';
 
         // Hide preview section when modal is closed
-        const previewSection = modal.querySelector('.preview-section')
+        const previewSection = modal.querySelector('.preview-section');
         if (previewSection) {
-          previewSection.style.display = 'none'
+          previewSection.style.display = 'none';
         }
       }
-    })
-  })
+    });
+  });
 
   // Close modal when clicking outside of modal content
   document.querySelectorAll('.modal').forEach((modal) => {
     modal.addEventListener('click', (event) => {
       if (event.target === modal) {
-        modal.style.display = 'none'
+        modal.style.display = 'none';
 
         // Hide preview section when modal is closed
-        const previewSection = modal.querySelector('.preview-section')
+        const previewSection = modal.querySelector('.preview-section');
         if (previewSection) {
-          previewSection.style.display = 'none'
+          previewSection.style.display = 'none';
         }
       }
-    })
-  })
+    });
+  });
 }
 
 /**
- * Initialize character counter for a textarea
- * @param {string} textareaId - ID of the textarea
- * @param {string} counterId - ID of the counter element
+ * Initialize character counters for all textareas with character counting
  */
-function initCharacterCounters(textareaId, counterId) {
-  const textarea = document.getElementById(textareaId)
-  const counter = document.getElementById(counterId)
-
-  if (textarea && counter) {
-    textarea.addEventListener('input', function () {
-      const currentLength = this.value.length
-      counter.textContent = currentLength
-
-      // Add visual feedback when approaching limit
-      if (currentLength > parseInt(this.getAttribute('maxlength')) * 0.9) {
-        counter.classList.add('char-count-warning')
-      } else {
-        counter.classList.remove('char-count-warning')
-      }
-    })
-  }
+function initCharacterCounters() {
+  // Find all textareas with character counters
+  document.querySelectorAll('textarea[maxlength]').forEach(textarea => {
+    const counterId = textarea.id.replace('personal-impact', 'impact') + '-char-count';
+    const counter = document.getElementById(counterId) || 
+                   document.querySelector(`[id$="${counterId}"]`);
+                   
+    if (textarea && counter) {
+      // Set initial count
+      counter.textContent = textarea.value.length;
+      
+      // Add event listener for input
+      textarea.addEventListener('input', function() {
+        const currentLength = this.value.length;
+        counter.textContent = currentLength;
+        
+        // Add visual feedback when approaching limit
+        const maxLength = parseInt(this.getAttribute('maxlength'));
+        if (currentLength > (maxLength * 0.9)) {
+          counter.classList.add('char-count-warning');
+        } else {
+          counter.classList.remove('char-count-warning');
+        }
+      });
+    }
+  });
 }
 
-/**
- * Open a modal by ID
- * @param {string} modalId - ID of the modal to open
- */
+// Generate default preview
+function generateDefaultPreviewText(modalType, searchTerm) {
+  return `This is a preview for ${modalType} regarding ${searchTerm || 'your condition'}.
+  
+Your message would be customized based on form input and include details about NIH research on ${searchTerm || 'your condition'}.`;
+}
+
+// Import generate functions for different modal types
+
+
+
 export function openModal(modalId) {
-  const modal = document.getElementById(modalId)
+  const modal = document.getElementById(modalId);
   if (modal) {
-    modal.style.display = 'flex'
+    modal.style.display = 'flex';
 
     // Reset preview section when opening modal
-    const previewSection = modal.querySelector('.preview-section')
+    const previewSection = modal.querySelector('.preview-section');
     if (previewSection) {
-      previewSection.style.display = 'none'
+      previewSection.style.display = 'none';
     }
   }
-}
-
-/**
- * Generate default preview text for other modal types
- * @param {string} modalType - Type of modal
- * @param {string} searchTerm - Search term used
- * @returns {string} Generated preview text
- */
-function generateDefaultPreviewText(modalType, searchTerm) {
-  return `This is a preview for ${modalType} regarding ${
-    searchTerm || 'your condition'
-  }.
-  
-Your message would be customized based on form input and include details about NIH research on ${
-    searchTerm || 'your condition'
-  }.`
 }
