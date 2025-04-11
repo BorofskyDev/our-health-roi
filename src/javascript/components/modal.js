@@ -17,7 +17,7 @@ export function createModal(options) {
   const previewSection = isPreviewable
     ? `
     <div class="preview-section" style="display: none;">
-      <h4>Preview</h4>
+      <h4 class="paragraph-heading">Preview</h4>
       <div class="preview-content"></div>
       <button class="cta-btn copy-btn">Copy Text</button>
     </div>
