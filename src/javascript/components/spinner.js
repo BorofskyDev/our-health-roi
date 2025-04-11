@@ -7,10 +7,10 @@
 export function createSpinner({
   id = 'loading-container',
   gradientStops = [
-    'var(--color-primary)',
-    'var(--color-accent)',
-    'var(--color-primary)',
-    'var(--color-accent)', // ← fixed typo
+    'hsl(var(--color-primary))',
+    'hsl(var(--color-accent))',
+    'hsl(var(--color-primary))',
+    'hsl(var(--color-accent))', // ← fixed typo
   ],
   size = 120,
   strokeWidth = 10,
