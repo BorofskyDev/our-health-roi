@@ -1,0 +1,29 @@
+/* Loading container styles */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  background-color: hsl(var(--color-bg-secondary));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+/* SVG spinner styles */
+.loading-svg {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1rem;
+}
+
+/* Loading text styles */
+.loading-text {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #333333;
+  margin-top: 0.5rem;
+}
+

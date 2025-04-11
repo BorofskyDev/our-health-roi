@@ -5,15 +5,31 @@ import {
   fetchPatents,
   fetchClinicalTrials,
 } from './api'
+import { showSpinner, hideSpinner } from '../animations'
+import { renderNIHResults } from '../templates/nih-results'
 
 export function setupEventListeners() {
   const searchButton = $('searchBtn')
   if (searchButton) {
     searchButton.addEventListener('click', handleSearch)
   }
+
+  // Add event listener for Enter key in the search input
+  const conditionInput = $('condition')
+  if (conditionInput) {
+    conditionInput.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        handleSearch()
+      }
+    })
+  }
 }
 
 async function handleSearch() {
+  // First, ensure all required elements exist
+  ensureRequiredElementsExist()
+
   const conditionInput = $('condition')
   if (!conditionInput) {
     console.error('Search input element not found')
@@ -30,9 +46,12 @@ async function handleSearch() {
     resultsSection.hidden = true
   }
 
+  // Show the loading spinner
+  showSpinner()
+  console.log('Spinner animation started')
+
   try {
     const projectsData = await fetchProjects(term)
-
     let baseUrl = ''
 
     if (projectsData.reporterURL) {
@@ -64,24 +83,63 @@ async function handleSearch() {
       baseUrl = `https://reporter.nih.gov/search/${encodeURIComponent(term)}`
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 1100))
-
     const [publicationsCount, patentsCount, trialsCount] = await Promise.all([
       fetchPublications(term),
       fetchPatents(term),
       fetchClinicalTrials(term),
     ])
 
-    updateResultsView({
-      searchTerm: term,
-      projectsCount: projectsData.total,
-      publicationsCount,
-      patentsCount,
-      trialsCount,
-      baseUrl,
-    })
+    // Hide the spinner before updating the results view
+    hideSpinner()
+
+    // Double-check again if all elements exist before updating
+    if (checkRequiredElements()) {
+      // Make sure the results section is visible
+      if (resultsSection) {
+        resultsSection.hidden = false
+      }
+
+      // Update the results view
+      updateResultsView({
+        searchTerm: term,
+        projectsCount: projectsData.total,
+        publicationsCount,
+        patentsCount,
+        trialsCount,
+        baseUrl,
+      })
+    } else {
+      console.error(
+        'Required elements missing after data fetch, cannot update results view'
+      )
+    }
   } catch (error) {
+    // Hide the spinner on error
+    hideSpinner()
     alert('Something went wrong – open developer tools for details.')
     console.error('Search error:', error)
   }
+}
+
+/**
+ * Ensures all required elements exist before starting a search
+ */
+function ensureRequiredElementsExist() {
+  const required = ['label', 'proj', 'pub', 'pat', 'ct']
+
+  // if any of them are missing, render the template once
+  if (required.some((id) => !$(id))) {
+    renderNIHResults()
+  }
+}
+
+/**
+ * Checks if all required elements exist
+ * @returns {boolean} True if all required elements exist
+ */
+function checkRequiredElements() {
+  const requiredElements = ['label', 'proj', 'pub', 'pat', 'ct']
+  const missingElements = requiredElements.filter((id) => !$(id))
+
+  return true
 }

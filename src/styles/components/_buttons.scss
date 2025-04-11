@@ -7,26 +7,29 @@
 }
 
 .icon-modal-btn-primary {
-  @include iconModalBtn;
+  @include iconModalBtn(hsl(var(--color-text-alt)));
   @extend .cta-btn;
 }
 
 .icon-modal-btn-secondary {
-  @include iconModalBtn;
-  stroke: hsl(var(--color-text));
+  @include iconModalBtn(hsl(var(--color-text)));
+  color: hsl(var(--color-text));
+
   &:hover,
   &:focus,
   &:focus-within {
-    stroke: hsl(var(--color-text-alt));
     color: hsl(var(--color-text-alt));
-}
+  }
 
-& svg {
-      stroke: inherit;
+  & svg {
+    vector-effect: non-scaling-stroke;
+
     & path {
-        color: hsl(var(--color-text));
-        stroke: inherit;
-
+      fill: none;
+      stroke: currentColor;
+      stroke-width: var(--spacing-2);
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
   }
 }

@@ -1,7 +1,1 @@
-
-import { setupEventListeners } from './event-handlers'
-
-
-export function initNIHReporter() {
-  setupEventListeners()
-}
+export * from './init.js'

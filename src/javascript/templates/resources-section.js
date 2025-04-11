@@ -1,6 +1,21 @@
 import { createExternalLink } from '../components/external-link'
 
 export function renderResourcesSection() {
+  const resourcesContainer = document.getElementById('resources')
+  if (!resourcesContainer) return
+
+  // Keep the heading and add the resources list
+  const heading = resourcesContainer.querySelector('h2')
+  resourcesContainer.innerHTML = ''
+
+  if (heading) {
+    resourcesContainer.appendChild(heading)
+  } else {
+    const newHeading = document.createElement('h2')
+    newHeading.className = 'section-title mb-24 center'
+    newHeading.textContent = 'Resources'
+    resourcesContainer.appendChild(newHeading)
+  }
   const resources = [
     {
       href: 'https://www.nih.gov/about-nih/who-we-are',
@@ -46,21 +61,14 @@ export function renderResourcesSection() {
     },
   ]
 
-  return `
-          <section class="flex-col-section" id="resources">
-      <h2 class="section-title mb-24 center">Resources</h2>
-      ${resources
-        .map(
-          (resource) =>
-            `<p class="external-link mb-44">
-          ${createExternalLink(
-            resource.href,
-            resource.text,
-            resource.ariaLabel
-          )}
-        </p>`
-        )
-        .join('')}
-    </section>
-    `
+  resources.forEach((resource) => {
+    const paragraph = document.createElement('p')
+    paragraph.className = 'external-link mb-44'
+    paragraph.innerHTML = createExternalLink(
+      resource.href,
+      resource.text,
+      resource.ariaLabel
+    )
+    resourcesContainer.appendChild(paragraph)
+  })
 }
