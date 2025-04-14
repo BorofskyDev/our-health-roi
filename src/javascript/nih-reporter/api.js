@@ -1,136 +1,21 @@
-//  src/javascript/nih-reporter/api.js
-
 /**
- * Fetch NIH projects data
- * @param {string} term - Search term
- * @returns {Promise<Object>} Projects data with total count and reporter URL
+ * Client‑side helper
+ * ------------------
+ * Hits *your own* /api/search endpoint, which aggregates
+ * NIH Projects, PubMed, PatentsView and ClinicalTrials.gov.
+ * Returns the JSON payload straight through.
+ *
+ *   {
+ *     term: "melanoma",
+ *     projects: { total, searchId, reporterURL },
+ *     publications: <number>,
+ *     patents: <number>,
+ *     trials: <number>
+ *   }
  */
 
-export async function fetchProjects(term) {
-  try {
-    const payload = {
-      criteria: {
-        advanced_text_search: {
-          operator: 'and',
-          search_field: 'all',
-          search_text: term,
-        },
-      },
-      offset: 0,
-      limit: 1,
-      include_fields: ['ProjectNum'],
-    }
-    const isLocalHost = window.location.hostname === 'localhost'
-    const endpoint = isLocalHost
-      ? '/nih-api/v2/projects/search'
-      : 'https://api.reporter.nih.gov/v2/projects/search'
-
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
-
-    if (!response.ok) {
-      throw new Error(`NIH Projects API error: ${response.status}`)
-    }
-
-    const data = await response.json()
-    const searchId = data.meta?.search_id || null
-    const reporterURL = data.meta?.properties?.URL || null
-
-    return {
-      total: data.meta?.total || 0,
-      searchId,
-      reporterURL,
-    }
-  } catch (error) {
-    console.error('Error fetching NIH projects:', error)
-    return { total: 0, reporterURL: null }
-  }
-}
-
-/**
- * Fetch PubMed publications count
- * @param {string} term - Search term
- * @returns {Promise<number>} Total publications count
- */
-export async function fetchPublications(term) {
-  try {
-    const url = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&retmode=json&rettype=count&term=${encodeURIComponent(
-      term
-    )}`
-    const response = await fetch(url)
-
-    if (!response.ok) {
-      throw new Error(`PubMed API error: ${response.status}`)
-    }
-
-    const data = await response.json()
-    return +(data.esearchresult?.count || 0)
-  } catch (error) {
-    console.error('Error fetching publications:', error)
-    return 0
-  }
-}
-
-/**
- * Fetch patents count
- * @param {string} term - Search term
- * @returns {Promise<number>} Total patents count
- */
-export async function fetchPatents(term) {
-  try {
-    const payload = {
-      q: {
-        _or: [
-          { _text_any: { patent_title: term } },
-          { _text_any: { patent_abstract: term } },
-        ],
-      },
-      f: ['patent_number'],
-      o: { per_page: 1 },
-    }
-
-    const response = await fetch('https://api.patentsview.org/patents/query', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
-
-    if (!response.ok) {
-      throw new Error(`PatentsView API error: ${response.status}`)
-    }
-
-    const data = await response.json()
-    return data.total_patent_count || 0
-  } catch (error) {
-    console.error('Error fetching patents:', error)
-    return 0
-  }
-}
-
-/**
- * Fetch clinical trials count
- * @param {string} term - Search term
- * @returns {Promise<number>} Total clinical trials count
- */
-export async function fetchClinicalTrials(term) {
-  try {
-    const url = `https://clinicaltrials.gov/api/v2/studies?query.cond=${encodeURIComponent(
-      term
-    )}&countTotal=true&pageSize=0`
-    const response = await fetch(url)
-
-    if (!response.ok) {
-      const text = await response.text()
-      throw new Error(`ClinicalTrials API error: ${text}`)
-    }
-
-    const data = await response.json()
-    return data.totalCount || 0
-  } catch (error) {
-    console.error('Error fetching clinical trials:', error)
-    return 0
-  }
+export async function fetchAll(term) {
+  const res = await fetch(`/api/search?q=${encodeURIComponent(term)}`)
+  if (!res.ok) throw new Error(`Search API error ${res.status}`)
+  return await res.json()
 }
